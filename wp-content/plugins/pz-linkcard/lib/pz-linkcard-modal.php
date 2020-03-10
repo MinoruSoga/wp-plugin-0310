@@ -1,0 +1,13 @@
+<?php if (!function_exists("get_option")) die;
+		echo '<div id="pz-lkc-modal">'.PHP_EOL;
+		echo '  <div id="pz-lkc-close"><a>×</a></div>'.PHP_EOL;
+		echo '  <div id="pz-lkc-content">'.PHP_EOL;
+		echo '    <form action="" method="post">'.PHP_EOL;
+		echo '      <label>'.__('Input URL', $this->text_domain).'</label><br />'.PHP_EOL;
+		echo '      <input id="pz-lkc-code" type="hidden" value="'.$this->options['code1'].'">'.PHP_EOL;
+		echo '      <input id="pz-lkc-url" type="text" size="60">'.PHP_EOL;
+		echo '      <input id="pz-lkc-insert" type="submit" value="'.__('Insert', $this->text_domain).'" onClick="return false;" >'.PHP_EOL;
+		echo '    </form>'.PHP_EOL;
+		echo '  </div>'.PHP_EOL;
+		echo '</div>'.PHP_EOL;
+		echo '<div id="pz-lkc-overlay"></div>'.PHP_EOL;
