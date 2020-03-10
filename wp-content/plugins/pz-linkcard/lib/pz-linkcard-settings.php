@@ -27,10 +27,6 @@
 			$this->options['ex-info'] = stripslashes($this->options['ex-info']);
 			$this->options['in-info'] = stripslashes($this->options['in-info']);
 			$this->options['th-info'] = stripslashes($this->options['th-info']);
-			
-			$this->options['favicon-api']   = preg_replace( array('/%DOMAIN%/i', '/%DOMAIN_URL%/i', '/%URL%/i' ), array('%DOMAIN%', '%DOMAIN_URL%', '%URL%'), (isset($this->options['favicon-api'])) ? $this->options['favicon-api'] : null );
-			$this->options['thumbnail-api'] = preg_replace( array('/%DOMAIN%/i', '/%DOMAIN_URL%/i', '/%URL%/i' ), array('%DOMAIN%', '%DOMAIN_URL%', '%URL%'), (isset($this->options['thumbnail-api'])) ? $this->options['thumbnail-api'] : null );
-			
 			$this->options['saved-date'] = time();
 			
 			$result = true;
@@ -138,10 +134,7 @@
 				<a class="pz-lkc-tab" href="#pz-lkc-external"><?php _e('External link', $this->text_domain); ?></a>
 				<a class="pz-lkc-tab" href="#pz-lkc-internal"><?php _e('Internal link', $this->text_domain); ?></a>
 				<a class="pz-lkc-tab" href="#pz-lkc-samepage"><?php _e('Same page link', $this->text_domain); ?></a>
-				<!-- <a class="pz-lkc-tab" href="#pz-lkc-api"><?php _e('Web API', $this->text_domain); ?></a> -->
-				<!-- <a class="pz-lkc-tab" href="#pz-lkc-check"><?php _e('Link check', $this->text_domain); ?></a> -->
 				<a class="pz-lkc-tab" href="#pz-lkc-editor"><?php _e('Editor', $this->text_domain); ?></a>
-				<!-- <a class="pz-lkc-tab" href="#pz-lkc-advanced"><?php _e('Advanced', $this->text_domain); ?></a> -->
 				<a class="pz-lkc-tab" href="#pz-lkc-initialize"><?php _e('Initialize', $this->text_domain); ?></a>
 			</div>
 				
@@ -548,21 +541,6 @@
 							<p><?php _e('*', $this->text_domain); ?> <?php _e('It is recommended that you leave the card height blank when using this setting.', $this->text_domain); ?></p>
 						</td>
 					</tr>
-
-					<tr valign="top">
-						<th scope="row"><?php _e('Display SNS Count', $this->text_domain); ?></th>
-						<td>
-							<select name="properties[sns-position]">
-								<option value=""  <?php if($this->options['sns-position'] == '')  echo 'selected="selected"'; ?>><?php _e('None', $this->text_domain); ?></option>
-								<option value="1" <?php if($this->options['sns-position'] == '1') echo 'selected="selected"'; ?>><?php _e('Bihind title', $this->text_domain); ?></option>
-								<option value="2" <?php if($this->options['sns-position'] == '2') echo 'selected="selected"'; ?>><?php _e('Bihind site-info', $this->text_domain); ?></option>
-							</select>
-							<label><input name="properties[sns-tw]"	type="checkbox" id="check" value="1" <?php checked(isset($this->options['sns-tw'])	? $this->options['sns-tw']	: null, 1); ?> /><?php _e('Twitter',	$this->text_domain); ?></label>
-							<label><input name="properties[sns-fb]"	type="checkbox" id="check" value="1" <?php checked(isset($this->options['sns-fb'])	? $this->options['sns-fb']	: null, 1); ?> /><?php _e('Facebook',	$this->text_domain); ?></label>
-							<label><input name="properties[sns-hb]"	type="checkbox" id="check" value="1" <?php checked(isset($this->options['sns-hb'])	? $this->options['sns-hb']	: null, 1); ?> /><?php _e('Hatena',		$this->text_domain); ?></label>
-							<label><input name="properties[sns-po]"	type="checkbox" id="check" value="1" <?php checked(isset($this->options['sns-po'])	? $this->options['sns-po']	: null, 1); ?> /><?php _e('Pocket',		$this->text_domain); ?></label>
-						</td>
-					</tr>
 				</table>
 			</div>
 			
@@ -706,23 +684,10 @@
 							<select name="properties[ex-thumbnail]">
 								<option value="" <?php if($this->options['ex-thumbnail'] == '') echo 'selected="selected"'; ?>><?php _e('None', $this->text_domain); ?></option>
 								<option value="1" <?php if($this->options['ex-thumbnail'] == '1') echo 'selected="selected"'; ?>><?php _e('Direct', $this->text_domain); ?></option>
-								<!-- <option value="3" <?php if($this->options['ex-thumbnail'] == '3') echo 'selected="selected"'; ?>><?php _e('Use WebAPI', $this->text_domain); ?></option> -->
-								<!-- <option value="13" <?php if($this->options['ex-thumbnail'] == '13') echo 'selected="selected"'; ?>><?php _e('Use WebAPI ,If can not direct', $this->text_domain); ?></option> -->
 							</select>
 
 						</td>
 					</tr>
-					<!-- <tr valign="top">
-						<th scope="row"><?php _e('Favicon', $this->text_domain); ?></th>
-						<td>
-							<select name="properties[ex-favicon]">
-								<option value=""  <?php if($this->options['ex-favicon'] == '')  echo 'selected="selected"'; ?>><?php _e('None', $this->text_domain); ?></option>
-								<option value="1" <?php if($this->options['ex-favicon'] == '1') echo 'selected="selected"'; ?> disabled="disabled"><?php _e('Direct', $this->text_domain); ?></option>
-								<option value="3" <?php if($this->options['ex-favicon'] == '3') echo 'selected="selected"'; ?>><?php _e('Use WebAPI', $this->text_domain); ?></option>
-								<option value="13" <?php if($this->options['ex-favicon'] == '13') echo 'selected="selected"'; ?> disabled="disabled"><?php _e('Use WebAPI ,If can not direct', $this->text_domain); ?></option>
-							</select>
-						</td>
-					</tr> -->
 					<tr valign="top">
 						<th scope="row"><?php _e('Added information', $this->text_domain); ?></th>
 						<td><input name="properties[ex-info]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['ex-info']); ?>" class="regular-text" /></td>
@@ -779,22 +744,9 @@
 							<select name="properties[in-thumbnail]">
 								<option value=""  <?php if($this->options['in-thumbnail'] == '') echo 'selected="selected"'; ?>><?php _e('None', $this->text_domain); ?></option>
 								<option value="1" <?php if($this->options['in-thumbnail'] == '1') echo 'selected="selected"'; ?>><?php _e('Direct', $this->text_domain); ?></option>
-								<!-- <option value="3" <?php if($this->options['in-thumbnail'] == '3') echo 'selected="selected"'; ?>><?php _e('Use WebAPI', $this->text_domain); ?></option>
-								<option value="13" <?php if($this->options['in-thumbnail'] == '13') echo 'selected="selected"'; ?>><?php _e('Use WebAPI ,If can not direct', $this->text_domain); ?></option> -->
 							</select>
 						</td>
 					</tr>
-					<!-- <tr valign="top">
-						<th scope="row"><?php _e('Favicon', $this->text_domain); ?></th>
-						<td>
-							<select name="properties[in-favicon]">
-								<option value=""  <?php if($this->options['in-favicon'] == '')  echo 'selected="selected"'; ?>><?php _e('None', $this->text_domain); ?></option>
-								<option value="1" <?php if($this->options['in-favicon'] == '1') echo 'selected="selected"'; ?> <?php if(!function_exists('has_site_icon') || !has_site_icon()) echo 'disabled="disabled"'; ?>><?php _e('Direct', $this->text_domain); ?></option>
-								<option value="3" <?php if($this->options['in-favicon'] == '3') echo 'selected="selected"'; ?>><?php _e('Use WebAPI', $this->text_domain); ?></option>
-								<option value="13" <?php if($this->options['in-favicon'] == '13') echo 'selected="selected"'; ?>><?php _e('Use WebAPI ,If can not direct', $this->text_domain); ?></option>
-							</select>
-						</td>
-					</tr> -->
 					<tr valign="top">
 						<th scope="row"><?php _e('Added information', $this->text_domain); ?></th>
 						<td><input name="properties[in-info]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['in-info']); ?>" class="regular-text" /><br></td>
@@ -877,71 +829,6 @@
 				</table>
 			</div>
 			
-			<!-- <div class="pz-lkc-item" id="pz-lkc-api">
-				<h3><?php echo __('Web-API settings', $this->text_domain).'<a href="https://popozure.info/pz-linkcard-settings-web-api" target="_blank"><img src="'.$this->plugin_dir_url.'img/help.png" width="16" height="16" title="'.__('Help', $this->text_domain).'" alt="help"></a>'; ?></h3>
-				<table class="form-table"
-					<tr valign="top">
-						<th scope="row"><?php _e('Favicon API', $this->text_domain); ?></th>
-						<td>
-							<input name="properties[favicon-api]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['favicon-api']); ?>" size="80" onclick="this.select(0,this.value.length);" />
-							<p><?php echo __('%DOMAIN% replace to domain name.', $this->text_domain).' '.__('(', $this->text_domain).__('ex.', $this->text_domain).' popozure.info '.__(')', $this->text_domain).'<br>'.__('%DOMAIN_URL% replace to domain URL.').' '.__('(', $this->text_domain).__('ex.', $this->text_domain).' https://popozure.info '.__(')', $this->text_domain).'<br>'.__('%URL% replace to URL.', $this->text_domain).' '.__('(', $this->text_domain).__('ex.', $this->text_domain).' https://popozure.info/pz-linkcard '.__(')', $this->text_domain); ?>
-							<p><?php _e('ex1.', $this->text_domain); ?><input name="" type="text" id="inputtext" value="https://www.google.com/s2/favicons?domain=%DOMAIN%" size="70" onclick="this.select(0,this.value.length);" readonly /></p>
-							<p><?php _e('ex2.', $this->text_domain); ?><input name="" type="text" id="inputtext" value="https://favicon.hatena.ne.jp/?url=%URL%" size="70" onclick="this.select(0,this.value.length);" readonly /></p>
-						</td>
-					</tr>
-					<tr valign="top">
-						<th scope="row" rowspan="3"><?php _e('Thumbnail API', $this->text_domain); ?></th>
-						<td>
-							<input name="properties[thumbnail-api]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['thumbnail-api']); ?>" size="80" onclick="this.select(0,this.value.length);" />
-							<p><?php echo __('%URL% replace to URL.', $this->text_domain).' '.__('(', $this->text_domain).__('ex.', $this->text_domain).' https://popozure.info/pz-linkcard '.__(')', $this->text_domain); ?></p>
-							<p><?php _e('ex1.', $this->text_domain); ?><input name="" type="text" id="inputtext" value="https://s.wordpress.com/mshots/v1/%URL%?w=100" size="70" onclick="this.select(0,this.value.length);" readonly /></p>
-							<p><?php _e('ex2.', $this->text_domain); ?><input name="" type="text" id="inputtext" value="https://capture.heartrails.com/100x100?%URL%" size="70" onclick="this.select(0,this.value.length);" readonly /></p>
-						</td>
-					</tr>
-				</table>
-			</div> -->
-			
-			<!-- <div class="pz-lkc-item" id="pz-lkc-check">
-				<h3><?php echo __('Link check settings', $this->text_domain).'<a href="https://popozure.info/pz-linkcard-settings-link-check" target="_blank"><img src="'.$this->plugin_dir_url.'img/help.png" width="16" height="16" title="'.__('Help', $this->text_domain).'" alt="help"></a>'; ?></h3>
-				<table class="form-table">
-					<tr valign="top">
-						<th scope="row"><?php _e('Do not link at error', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-unlink]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-unlink']) ? $this->options['flg-unlink'] : null, 1); ?> /><?php _e('When access status is "403", "404", "410", unlink', $this->text_domain); ?></label></td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('SSL verification disabled', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-ssl]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-ssl']) ? $this->options['flg-ssl'] : null, 1); ?> /><?php _e('Try setting if the contents of the SSL site can not be acquired.', $this->text_domain); ?></label></td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Follow location', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-redir]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-redir']) ? $this->options['flg-redir'] : null, 1); ?> /><?php _e('Track when the link destination is redirected.', $this->text_domain); ?></label></td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Set referer', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-referer]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-referer']) ? $this->options['flg-referer'] : null, 1); ?> /><?php _e('Notify the article URL to the link destination.', $this->text_domain); ?></label></td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Use User-Agent', $this->text_domain); ?></th>
-						<td>
-							<label><input name="properties[flg-agent]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-agent']) ? $this->options['flg-agent'] : null, 1); ?> /></label><?php _e('Notify using Pz-LinkCard to the link destination.', $this->text_domain); ?></label>
-							<p style="margin-left: 20px;"><input name="properties[user-agent]" type="text" id="inputtext" value="<?php echo esc_attr('Pz-LinkCard-Crawler/'.$this->options['plugin-version']); ?>" size="77" readonly /></p>
-						</td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Broken link checker', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-alive]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-alive']) ? $this->options['flg-alive'] : null, 1); ?> /><?php _e('Alive confirmation of the link destination.', $this->text_domain); ?></label></td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Broken link count', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-alive-count]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-alive-count']) ? $this->options['flg-alive-count'] : null, 1); ?> /><?php _e('The number of broken links is displayed next to the submenu.', $this->text_domain); ?></label></td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Multi-site compatible', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-subdir]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-subdir']) ? $this->options['flg-subdir'] : null, 1); ?> /><?php _e('In the case of the multi-site of the subdirectory type, the site under the subdirectory is judged as an external site.', $this->text_domain); ?></label></td>
-					</tr>
-				</table>
-			</div> -->
-			
 			<div class="pz-lkc-item" id="pz-lkc-editor">
 				<h3><?php echo __('Editor settings', $this->text_domain).'<a href="https://popozure.info/pz-linkcard-settings-editor" target="_blank"><img src="'.$this->plugin_dir_url.'img/help.png" width="16" height="16" title="'.__('Help', $this->text_domain).'" alt="help"></a>'; ?></h3>
 				<table class="form-table">
@@ -1015,95 +902,6 @@
 
 				</table>
 			</div>
-			
-			<!-- <div class="pz-lkc-item" id="pz-lkc-advanced">
-				<h3><?php echo __('Advanced settings', $this->text_domain).'<a href="https://popozure.info/pz-linkcard-settings-advanced" target="_blank"><img src="'.$this->plugin_dir_url.'img/help.png" width="16" height="16" title="'.__('Help', $this->text_domain).'" alt="help"></a>'; ?></h3>
-				<table class="form-table">
-					<tr valign="top">
-						<th scope="row"><?php _e('Trailing slash', $this->text_domain); ?></th>
-						<td>
-							<select name="properties[trail-slash]">
-								<?php $in_data	= (isset($this->options['trail-slash']) ? $this->options['trail-slash'] : ''); ?>
-								<option value=""  <?php if($in_data == '')  echo 'selected="selected"'; ?>><?php _e('As it', $this->text_domain); ?></option>
-								<option value="1" <?php if($in_data == '1') echo 'selected="selected"'; ?>><?php _e('When only domain name, remove', $this->text_domain); ?></option>
-								<option value="2" <?php if($in_data == '2') echo 'selected="selected"'; ?>><?php _e('Always remove', $this->text_domain); ?></option>
-							</select>
-						</td>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row"><?php _e('CSS to be added', $this->text_domain); ?></th>
-						<td><input name="properties[css-add]" type="text" id="inputtext" value="<?php echo (isset($this->options['css-add']) ? esc_attr($this->options['css-add']) : ''); ?>" size="80" /><br>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('specified CSS', $this->text_domain); ?></th>
-						<td><label><input name="properties[css-sp]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['css-sp']) ? $this->options['css-sp'] : null, 1); ?> /><?php _e('Use specified CSS file', $this->text_domain); ?></label></td>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('CSS file', $this->text_domain); ?></th>
-						<td><input name="properties[css-file]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['css-file']); ?>" size="80" /><br><p><?php _e('(ex. https://exsample.com/style.css )', $this->text_domain); ?></p></td>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('CSS file', $this->text_domain); ?></th>
-						<td><input name="properties[css-path]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['css-path']); ?>" size="80" /><br>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('CSS URL', $this->text_domain); ?></th>
-						<td><input name="properties[css-url]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['css-url']); ?>" size="80" /><br>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row"><?php _e('Class ID to be added(for PC)', $this->text_domain); ?></th>
-						<td><input name="properties[class-pc]" type="text" id="inputtext" value="<?php echo (isset($this->options['class-pc']) ? esc_attr($this->options['class-pc']) : ''); ?>" size="40" /><br>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Class ID to be added(for Mobile)', $this->text_domain); ?></th>
-						<td><input name="properties[class-mobile]" type="text" id="inputtext" value="<?php echo (isset($this->options['class-mobile']) ? esc_attr($this->options['class-mobile']) : ''); ?>" size="40" /><br>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row"><?php _e('Google AMP URL', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-amp-url]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-amp-url']) ? $this->options['flg-amp-url'] : null, 1); ?> /><?php _e('If the URL is AMP, display simple.', $this->text_domain); ?></label></td>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row"><?php _e('IDNA Convert', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-idn]" type="checkbox" id="check" value="1" <?php checked( (isset($this->options['flg-idn']) && function_exists('idn_to_utf8') ) ? $this->options['flg-idn'] : null, 1); ?> /><?php _e('Convert domain name from IDNA ASCII to Unicode.', $this->text_domain); ?></label></td>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row"><?php _e('Relative URL', $this->text_domain); ?></th>
-						<td><label><input name="properties[flg-relative-url]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['flg-relative-url']) ? $this->options['flg-relative-url'] : null, 1); ?> /><?php _e('For relative-specified URLs, complement the site URL.', $this->text_domain); ?></label></td>
-					</tr>
-
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('Display link to author page', $this->text_domain); ?></th>
-						<td><input name="properties[plugin-link]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['plugin-link']) ? $this->options['plugin-link'] : null, 1); ?> disabled="disabled" /><a href="<?php echo $this->options['plugin-url']; ?>" target="_blank"><?php echo $this->options['plugin-name']; ?></a></td>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('Plugin URL', $this->text_domain); ?></th>
-						<td><input name="properties[plugin-url]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['plugin-url']); ?>" class="regular-text" /></td>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('Plugin name', $this->text_domain); ?></th>
-						<td><input name="properties[plugin-name]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['plugin-name']); ?>" class="regular-text" /></td>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('Plugin version', $this->text_domain); ?></th>
-						<td><input name="properties[plugin-version]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['plugin-version']); ?>" class="regular-text" /></td>
-					</tr>
-					<tr valign="top" style="display: none;">
-						<th scope="row"><?php _e('Saved datetime', $this->text_domain); ?></th>
-						<td><input name="properties[saved-date]" type="text" id="inputtext" value="<?php echo esc_attr($this->options['saved-date']); ?>" /></td>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row"><?php _e('Display elapsed time', $this->text_domain); ?></th>
-						<td><label><input name="properties[debug-time]" type="checkbox" id="check" value="1" <?php checked(isset($this->options['debug-time']) ? $this->options['debug-time'] : null, 1); ?> /><?php _e('Output the elapsed time to HTML comment.', $this->text_domain); _e('(Not recommended)', $this->text_domain); ?></label></td>
-					</tr>
-
-					</table>
-			</div> -->
 			
 			<div class="pz-lkc-item" id="pz-lkc-initialize">
 				<h3><?php echo __('Initialize', $this->text_domain).'<a href="https://popozure.info/pz-linkcard-settings-initialize" target="_blank"><img src="'.$this->plugin_dir_url.'img/help.png" width="16" height="16" title="'.__('Help', $this->text_domain).'" alt="help"></a>'; ?></h3>

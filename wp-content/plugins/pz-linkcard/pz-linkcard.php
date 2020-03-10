@@ -126,8 +126,6 @@ class Pz_LinkCard {
 			'in-thumbnail'		=>	'1',
 			'ex-favicon'		=>	'3',
 			'in-favicon'		=>	'3',
-			'favicon-api'		=>	'https://www.google.com/s2/favicons?domain=%DOMAIN%',
-			'thumbnail-api'		=>	'https://s.wordpress.com/mshots/v1/%URL%?w=100',
 			'thumbnail-position'=>	'2',
 			'thumbnail-width'	=>	'100px',
 			'thumbnail-height'	=>	'108px',
@@ -162,11 +160,6 @@ class Pz_LinkCard {
 			'css-url'			=>	null,
 			'class-pc'			=>	null,
 			'class-mobile'		=>	null,
-			'sns-position'		=>	'2',
-			'sns-tw'			=>	'1',
-			'sns-fb'			=>	'1',
-			'sns-hb'			=>	'1',
-			'sns-po'			=>	'1',
 			'link-all'			=>	'1',
 			'blockquote'		=>	null,
 			'nofollow'			=>	null,
@@ -254,7 +247,7 @@ class Pz_LinkCard {
 			add_action('wp_enqueue_scripts', array($this, 'enqueue'));
 		}
 		
-		add_action( 'pz_linkcard_check', array( $this, 'schedule_hook_check' ) );
+		// add_action( 'pz_linkcard_check', array( $this, 'schedule_hook_check' ) );
 		add_action( 'pz_linkcard_alive', array( $this, 'schedule_hook_alive' ) );
 		
 		if (!wp_next_scheduled('pz_linkcard_check')) {
@@ -529,10 +522,6 @@ class Pz_LinkCard {
 		$thumbnail_url	= (isset($data['thumbnail'])	? $data['thumbnail'] : null);
 		$favicon_url	= (isset($data['favicon'])		? $data['favicon'] : null);
 		$result_code	= (isset($data['result_code'])	? $data['result_code'] : null);
-		$sns_tw			= (isset($data['sns_twitter'])	? $data['sns_twitter'] : null);
-		$sns_fb			= (isset($data['sns_facebook'])	? $data['sns_facebook'] : null);
-		$sns_hb			= (isset($data['sns_hatena'])	? $data['sns_hatena'] : null);
-		$sns_po			= (isset($data['sns_pocket'])	? $data['sns_pocket'] : null);
 		$alive_result	= (isset($data['alive_result'])	? $data['alive_result'] : null);
 		
 		$thumbnail		= null;
@@ -601,15 +590,6 @@ class Pz_LinkCard {
 					$sw_thumbnail = '3';
 				}
 			}
-			if ($sw_thumbnail == '3') {											// WebAPIを利用
-				// 画像取得（WebAPI）
-				if (isset($this->options['thumbnail-api'])) {
-					$thumbnail = preg_replace('/%DOMAIN_URL%/', $domain_url, $this->options['thumbnail-api'] );
-					$thumbnail = preg_replace('/%DOMAIN%/', $domain, $thumbnail);
-					$thumbnail = preg_replace('/%URL%/', rawurlencode($url), $thumbnail);
-					$thumbnail = '<img class="lkc-thumbnail-img" src="'.$thumbnail.'" alt="" />';
-				}
-			}
 		}
 		
 		// ファビコン取得
@@ -621,15 +601,6 @@ class Pz_LinkCard {
 					$favicon = '<img class="lkc-favicon" src="'.$favicon_url.'" alt="" width=16 height=16 />';
 				} elseif ($sw_favicon == '13') {								// 直接取得に失敗
 					$sw_favicon == '3';
-				}
-			}
-			if ($sw_favicon == '3') {											// WebAPIを利用
-				// サイトアイコン取得（WebAPI）
-				if (isset($this->options['favicon-api'])) {
-					$favicon = preg_replace('/%DOMAIN_URL%/', $domain_url, $this->options['favicon-api'] );
-					$favicon = preg_replace('/%DOMAIN%/', $domain, $favicon);
-					$favicon = preg_replace('/%URL%/', rawurlencode($url), $favicon);
-					$favicon = '<img class="lkc-favicon" src="'.$favicon.'" alt="" width=16 height=16 />';
 				}
 			}
 		}
@@ -727,50 +698,6 @@ class Pz_LinkCard {
 			$st_cl		= '';
 		}
 		
-		// ソーシャルカウントの表示
-		$sns		= null;
-		$sns_info	= null;
-		$sns_title	= null;
-		if ( isset($this->options['sns-position']) ? $this->options['sns-position'] : null ) {
-			$sns	=	'';
-			// カード全体をリンクにするときは表示のみ
-			if ((isset($this->options['link-all']) ? $this->options['link-all'] : null) == '1') {
-				if (isset($this->options['sns-tw']) && !is_null($this->options['sns-tw']) && $sns_tw > 0) {
-					$sns .= ' <div class="lkc-sns-tw">'.$sns_tw.'&nbsp;tweet'.(($sns_tw > 1) ? 's' : '').'</div>';
-				}
-				if (isset($this->options['sns-fb']) && !is_null($this->options['sns-fb']) && $sns_fb > 0) {
-					$sns .= ' <div class="lkc-sns-fb">'.$sns_fb.'&nbsp;share'.(($sns_fb > 1) ? 's' : '').'</div>';
-				}
-				if (isset($this->options['sns-hb']) && !is_null($this->options['sns-hb']) && $sns_hb > 0) {
-					$sns .= ' <div class="lkc-sns-hb">'.$sns_hb.'&nbsp;user'.(($sns_hb > 1) ? 's' : '').'</div>';
-				}
-				if (isset($this->options['sns-po']) && !is_null($this->options['sns-po']) && $sns_po > 0) {
-					$sns .= ' <div class="lkc-sns-po">'.$sns_po.'&nbsp;pocket'.(($sns_po > 1) ? 's' : '').'</div>';
-				}
-			} else {
-				// 外部リンクアイコンを表示させるプラグイン対応のため no_icon を付与
-				if (isset($this->options['sns-tw']) && !is_null($this->options['sns-tw']) && $sns_tw > 0) {
-					$sns .= ' <a class="lkc-sns-tw no_icon" href="https://twitter.com/search?q=' .preg_replace('/.*\/\/(.*)/', '$1', $url).'&text='.esc_html($title).'" target="_blank">'.$sns_tw.'&nbsp;tweet'.(($sns_tw > 1) ? 's' : '').'</a>';
-				}
-				if (isset($this->options['sns-fb']) && !is_null($this->options['sns-fb']) && $sns_fb > 0) {
-					$sns .= ' <a class="lkc-sns-fb no_icon" href="https://www.facebook.com/" target="_blank">'.$sns_fb.'&nbsp;share'.(($sns_fb > 1) ? 's' : '').'</a>';
-				}
-				if (isset($this->options['sns-hb']) && !is_null($this->options['sns-hb']) && $sns_hb > 0) {
-					$sns .= ' <a class="lkc-sns-hb no_icon" href="https://b.hatena.ne.jp/entry/s/' .preg_replace('/.*\/\/(.*)/', '$1', $url).'" target="_blank">'.$sns_hb.'&nbsp;user'.(($sns_hb > 1) ? 's' : '').'</a>';
-				}
-				if (isset($this->options['sns-po']) && !is_null($this->options['sns-po']) && $sns_po > 0) {
-					$sns .= ' <a class="lkc-sns-po no_icon" href="https://getpocket.com/" target="_blank">'.$sns_po.'&nbsp;pocket'.(($sns_po > 1) ? 's' : '').'</a>';
-				}
-			}
-			if ($sns) {
-				if ($this->options['sns-position'] == '1') {
-					$sns_title	= '<div class="lkc-share">'.$sns.'</div>';
-				} else {
-					$sns_info	= '&nbsp;'.'<div class="lkc-share">'.$sns.'</div>';
-				}
-			}
-		}
-		
 		// サムネイル
 		if ($thumbnail) {
 			$thumbnail = '<figure class="lkc-thumbnail">'.$thumbnail.'</figure>';
@@ -814,10 +741,10 @@ class Pz_LinkCard {
 		} else {
 			$post_date = '';
 		}
-		$domain_info	=	'<div class="lkc-info">'.$a_op.$favicon.'<div class="lkc-domain"'.$site_title.'>'.$site_name.'</div>'.$added_info.$a_cl.$sns_info.$url2.$post_date.'</div>';
+		$domain_info	=	'<div class="lkc-info">'.$a_op.$favicon.'<div class="lkc-domain"'.$site_title.'>'.$site_name.'</div>'.$added_info.$a_cl.$url2.$post_date.'</div>';
 		
 		// 記事内容
-		//$content = '<div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.$a_cl.$sns_title.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div>';
+		$content = '<div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div>';
 		
 		// Google AMPに対応
 		if ( (function_exists('is_amp_endpoint') && is_amp_endpoint()) || isset($this->amp) || ( isset($this->options['flg-amp-url']) && ( preg_match('/\/amp\/?$/i', $_SERVER["REQUEST_URI"]) || preg_match('/\?amp=1$/i', $_SERVER["REQUEST_URI"]) ) ) ) {
@@ -827,16 +754,16 @@ class Pz_LinkCard {
 			// HTMLタグ作成
 			switch (isset($this->options['info-position']) ? $this->options['info-position'] : null) {
 			case '1':
-				$tag = $wrap_op.$a_op_all.'<div class="lkc-card">'.$domain_info.'<div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.$a_cl.$sns_title.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div><div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
+				$tag = $wrap_op.$a_op_all.'<div class="lkc-card">'.$domain_info.'<div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div><div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
 				break;
 			case '2':
-				$tag = $wrap_op.$a_op_all.'<div class="lkc-card"><div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.$a_cl.$sns_title.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div>'.$domain_info.'<div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
+				$tag = $wrap_op.$a_op_all.'<div class="lkc-card"><div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div>'.$domain_info.'<div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
 				break;
 			case '3':
-				$tag = $wrap_op.$a_op_all.'<div class="lkc-card"><div class="lkc-content">'.$a_op.$thumbnail.$domain_info.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.$a_cl.$sns_title.$url1.'</div><div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div><div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
+				$tag = $wrap_op.$a_op_all.'<div class="lkc-card"><div class="lkc-content">'.$a_op.$thumbnail.$domain_info.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.'</div><div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div><div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
 				break;
 			default:
-				$tag = $wrap_op.$a_op_all.'<div class="lkc-card"><div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.$a_cl.$sns_title.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div><div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
+				$tag = $wrap_op.$a_op_all.'<div class="lkc-card"><div class="lkc-content">'.$a_op.$thumbnail.'<div class="lkc-title"><div class="lkc-title-text">'.$title.'</div>'.'</div>'.$url1.'<div class="lkc-excerpt">'.$excerpt.'</div>'.$moretag.'</div><div class="clear"></div></div>'.$a_cl_all.$wrap_cl;
 			}
 		}
 		
@@ -936,123 +863,6 @@ class Pz_LinkCard {
 			return	$parse['scheme'].'://'.$parse ['host'].$rel_path;
 		}
 		return		$parse['scheme'].'://'.$parse['host'].dirname($parse['path'] ).'/'.$rel_path;
-	}
-
-	// ソーシャルカウント取得
-	public function pz_RenewSNSCount( $data ) {
-		if (!isset($this->options['sns-position']) || $this->options['sns-position'] == '') {
-			return null;
-		}
-		if (!isset($data) || !is_array($data)) {
-			return null;
-		}
-		
-		$data = $this->pz_GetCache($data);
-		if (!isset($data) || !is_array($data)) {
-			return null;
-		}
-		
-		// ソーシャルカウント
-		$sns_renew	= false;
-		$update_cnt	= false;
-		
-		// タイムオーバー
-		$opt = array( 'timeout' => 30 );
-		
-		// 保存期間満了でソーシャルカウントをリセット
-		if ($this->now > $data['sns_nexttime'] && $data['result_code'] <= 200 ) {
-			$sns_renew		= true;
-		}
-		
-		// Twitter count.json 2015/11/21 非公式サービス終了に伴い停止→代替APIへ変更
-		if (isset($this->options['sns-tw']) && !is_null($this->options['sns-tw'])) {
-			$count_before = isset($data['sns_twitter']) ? $data['sns_twitter'] : -1;
-			if ($sns_renew || $count_before < 0) {
-//				$result = wp_remote_get( 'http://urls.api.twitter.com/1/urls/count.json?url=' .rawurlencode($data['url']), $opt );
-				$result = wp_remote_get( 'https://jsoon.digitiminimi.com/twitter/count.json?url=' .rawurlencode($data['url']), $opt );
-				if (isset($result) && !is_wp_error($result) && $result['response']['code'] == 200) {
-					$count = intval(json_decode($result['body'])->count);
-					if ($count > $count_before) {
-						$data['sns_twitter'] = $count;
-						$update_cnt = true;
-					}
-				}
-			}
-		}
-		
-		if (isset($this->options['sns-fb']) && !is_null($this->options['sns-fb'])) {
-			$count_before = intval(isset($data['sns_facebook']) ? $data['sns_facebook'] : -1);
-			if ($sns_renew || $count_before < 0) {
-				$result = wp_remote_get( 'https://graph.facebook.com/?id=' .rawurlencode($data['url']), $opt );
-				if (isset($result) && !is_wp_error($result) && $result['response']['code'] == 200) {
-					$json = json_decode($result['body']);
-					$count = intval(isset($json->share->share_count) ? $json->share->share_count : 0);
-					if ($count > $count_before) {
-						$data['sns_facebook'] = $count;
-						$update_cnt = true;
-					}
-				}
-			}
-		}
-		
-		if (isset($this->options['sns-hb']) && !is_null($this->options['sns-hb'])) {
-			$count_before = isset($data['sns_hatena']) ? $data['sns_hatena'] : -1;
-			if ($sns_renew || $count_before < 0) {
-				$result = wp_remote_get( 'http://api.b.st-hatena.com/entry.count?url=' .rawurlencode($data['url']), $opt );
-				if (isset($result) && !is_wp_error($result) && $result['response']['code'] == 200) {
-					$count = intval($result['body']);
-					if ($count > $count_before) {
-						$data['sns_hatena'] = $count;
-						$update_cnt = true;
-					}
-				}
-			}
-		}
-		
-		if (isset($this->options['sns-po']) && !is_null($this->options['sns-po'])) {
-			$count_before = isset($data['sns_pocket']) ? $data['sns_pocket'] : -1;
-			if ($sns_renew || $count_before < 0) {
-				$result = wp_remote_get( 'https://widgets.getpocket.com/v1/button?label=pocket&count=vertical&align=left&v=1&src=https&url=' .rawurlencode($data['url']), $opt );
-				if (isset($result) && !is_wp_error($result) && $result['response']['code'] == 200) {
-					preg_match('/<em id="cnt">([0-9]*)<\/em>/', $result['body'], $m);
-					$count = intval($m[1] ? $m[1] : 0);
-					if ($count > $count_before) {
-						$data['sns_pocket'] = $count;
-						$update_cnt = true;
-					}
-				}
-			}
-		}
-		
-		// 登録してから一週間までは毎日、それ以降は週一回更新（取得が固まらないようにランダム時間付与）
-		if ($update_cnt || ($this->now - strtotime($data['regist']) < WEEK_IN_SECONDS)) {
-			$sns_nexttime = $this->now + DAY_IN_SECONDS + rand(0, DAY_IN_SECONDS);	// 1day + 0-24h
-		} else {
-			$sns_nexttime = $this->now + WEEK_IN_SECONDS + rand(0, DAY_IN_SECONDS);	// 7days + 0-24h
-		}
-		// MINUTE_IN_SECONDS	= 60
-		// HOUR_IN_SECONDS		= 60	*	MINUTE_IN_SECONDS	= 3600
-		// DAY_IN_SECONDS		= 24	*	HOUR_IN_SECONDS		= 86400
-		// WEEK_IN_SECONDS		= 7		*	DAY_IN_SECONDS		= 604800
-		// YEAR_IN_SECONDS		= 365	*	DAY_IN_SECONDS		
-
-		global	$wpdb;
-		$wpdb->update(
-			$this->db_name,
-			array(
-				'sns_twitter'	=> $data['sns_twitter'],
-				'sns_facebook'	=> $data['sns_facebook'],
-				'sns_hatena'	=> $data['sns_hatena'],
-				'sns_pocket'	=> $data['sns_pocket'],
-				'sns_time'		=> $this->now,
-				'sns_nexttime'	=> $sns_nexttime,
-				'uptime'		=> $this->now
-			),
-			array(
-					'id' => $data['id']
-			)
-		);
-		return $data;
 	}
 
 	// キャッシュデータを取得
@@ -1569,10 +1379,6 @@ class Pz_LinkCard {
 		if		(!isset($data['use_post_id1']) || !$data['use_post_id1']) {
 			$data['use_post_id1']	=	get_the_ID();
 		}
-		$data['sns_twitter']		=	(isset( $data['sns_twitter']	) ? $data['sns_twitter']	: -1	);
-		$data['sns_facebook']		=	(isset( $data['sns_facebook']	) ? $data['sns_facebook']	: -1	);
-		$data['sns_hatena']			=	(isset( $data['sns_hatena']		) ? $data['sns_hatena']		: -1	);
-		$data['sns_nexttime']		=	(isset( $data['sns_nexttime']	) ? $data['sns_nexttime']	: 0		);
 		$data['uptime']				=	$this->now;
 		$data['alive_time']			=	$this->now;
 		$data['alive_result']		=	$result_code;
@@ -1735,27 +1541,27 @@ class Pz_LinkCard {
 	}
 
 	// WP-CRONスケジュール（SNSカウント取得）
-	public function schedule_hook_check() {
-		if (!isset($this->options['sns-position']) || $this->options['sns-position'] == '') {
-			return null;
-		}
+	// public function schedule_hook_check() {
+	// 	if (!isset($this->options['sns-position']) || $this->options['sns-position'] == '') {
+	// 		return null;
+	// 	}
 		
-		global $wpdb;
-		$result	= (array) $wpdb->get_results($wpdb->prepare("SELECT url,sns_nexttime FROM $this->db_name WHERE sns_nexttime<%d ORDER BY sns_nexttime ASC", $this->now));
-		$i		= 0;
-		if (isset($result) && is_array($result) && count($result) > 0) {
-			foreach($result as $data) {
-				$i++;
-				if ($i > 10) {
-					wp_schedule_single_event(time() + 30, 'pz_linkcard_check');
-					break;
-				}
-				if (isset($data) && isset($data->url)) {
-					$data = $this->pz_RenewSNSCount(array('url' => $data->url) );
-				}
-			}
-		}
-	}
+	// 	global $wpdb;
+	// 	$result	= (array) $wpdb->get_results($wpdb->prepare("SELECT url,sns_nexttime FROM $this->db_name WHERE sns_nexttime<%d ORDER BY sns_nexttime ASC", $this->now));
+	// 	$i		= 0;
+	// 	if (isset($result) && is_array($result) && count($result) > 0) {
+	// 		foreach($result as $data) {
+	// 			$i++;
+	// 			if ($i > 10) {
+	// 				wp_schedule_single_event(time() + 30, 'pz_linkcard_check');
+	// 				break;
+	// 			}
+	// 			if (isset($data) && isset($data->url)) {
+	// 				$data = $this->pz_RenewSNSCount(array('url' => $data->url) );
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	// WP-CRONスケジュール（存在チェック）
 	public function schedule_hook_alive() {
